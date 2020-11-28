@@ -85,11 +85,15 @@ class ImagePlugin : Plugin<Project> {
 
                     val dir = variant.allRawAndroidResources.files
 
+                    val android = project.extensions.findByType(AppExtension::class.java)!!
+                    val sourceSets = android.sourceSets.findByName(variant.name)!!.res!!
+                    val allSourceDirs = (android.sourceSets.findByName("main")!!.res!!.srcDirs + sourceSets.srcDirs).filter { it.exists() }
+
                     val cacheList = ArrayList<String>()
 
                     val imageFileList = ArrayList<File>()
 
-                    for (channelDir: File in dir) {
+                    for (channelDir: File in allSourceDirs) {
                         traverseResDir(channelDir, imageFileList, cacheList, object : IBigImage {
                             override fun onBigImage(file: File) {
                                 bigImgList.add(file.absolutePath)
@@ -101,8 +105,22 @@ class ImagePlugin : Plugin<Project> {
 
                     val start = System.currentTimeMillis()
 
-                    mtDispatchOptimizeTask(imageFileList)
+                    val imgDirectories = imageFileList.map { it.parent }.toSet()
+
+                    val buildDir = File(project.buildDir, "img-opt/${variant.name}/res/")
+                    if (buildDir.exists()) buildDir.deleteRecursively()
+                    val generatedFolders = project.files(imgDirectories.map { File(buildDir, File(it).name) })
+                    for (folder in generatedFolders) {
+                        folder.mkdirs()
+                    }
+
+                    mtDispatchOptimizeTask(imageFileList, outputDir = buildDir)
                     LogUtil.log(sizeInfo())
+
+                    generatedFolders.builtBy(it)
+                    sourceSets.srcDir(buildDir)
+                    variant.registerGeneratedResFolders(generatedFolders)
+
                     LogUtil.log("---- McImage Plugin End ----, Total Time(ms) : ${System.currentTimeMillis() - start}")
                 }
 
@@ -120,7 +138,6 @@ class ImagePlugin : Plugin<Project> {
                 (project.tasks.findByName(chmodTask.name) as Task).dependsOn(mergeResourcesTask.taskDependencies.getDependencies(mergeResourcesTask))
                 (project.tasks.findByName(mcPicTask.name) as Task).dependsOn(project.tasks.findByName(chmodTask.name) as Task)
                 mergeResourcesTask.dependsOn(project.tasks.findByName(mcPicTask.name))
-
             }
         }
 
@@ -158,14 +175,15 @@ class ImagePlugin : Plugin<Project> {
         imageFileList.add(file)
     }
 
-    private fun mtDispatchOptimizeTask(imageFileList: ArrayList<File>) {
+    private fun mtDispatchOptimizeTask(imageFileList: ArrayList<File>, outputDir: File) {
         if (imageFileList.size == 0 || bigImgList.isNotEmpty()) {
             return
         }
         val coreNum = Runtime.getRuntime().availableProcessors()
         if (imageFileList.size < coreNum || !mcImageConfig.multiThread) {
             for (file in imageFileList) {
-                optimizeImage(file)
+                val outDir = File(outputDir, File(file.parent).name)
+                optimizeImage(file, outDir)
             }
         } else {
             val results = ArrayList<Future<Unit>>()
@@ -176,7 +194,9 @@ class ImagePlugin : Plugin<Project> {
                 val to = if (i == coreNum - 1) imageFileList.size - 1 else (i + 1) * part - 1
                 results.add(pool.submit(Callable<Unit> {
                     for (index in from..to) {
-                        optimizeImage(imageFileList[index])
+                        val imageFile = imageFileList[index]
+                        val outDir = File(outputDir, File(imageFile.parent).name)
+                        optimizeImage(imageFile, outDir)
                     }
                 }))
             }
@@ -184,23 +204,27 @@ class ImagePlugin : Plugin<Project> {
                 try {
                     f.get()
                 } catch (ignore: Exception) {
+                    ignore.printStackTrace()
                 }
             }
         }
     }
 
-    private fun optimizeImage(file: File) {
+    private fun optimizeImage(file: File, outputDir: File) {
         val path: String = file.path
         if (File(path).exists()) {
             oldSize += File(path).length()
         }
         when (mcImageConfig.optimizeType) {
-            Config.OPTIMIZE_WEBP_CONVERT ->
-                WebpUtils.securityFormatWebp(file, mcImageConfig, mcImageProject)
-            Config.OPTIMIZE_COMPRESS_PICTURE ->
-                CompressUtil.compressImg(file)
+            Config.OPTIMIZE_WEBP_CONVERT -> {
+                WebpUtils.securityFormatWebp(file, mcImageConfig, mcImageProject, outputDir)
+                countNewSize(File(outputDir, (file.name.substring(0, file.name.lastIndexOf("."))) + ".webp").path)
+            }
+            Config.OPTIMIZE_COMPRESS_PICTURE -> {
+                CompressUtil.compressImg(file, outputDir)
+                countNewSize(File(outputDir, file.name).path)
+            }
         }
-        countNewSize(path)
     }
 
     private fun countNewSize(path: String) {

@@ -1,9 +1,9 @@
 apply plugin: 'maven'
 apply plugin: 'com.jfrog.bintray'
 
-def siteUrl = 'https://github.com/smallSohoSolo/McImage'
-def gitUrl = 'https://github.com/smallSohoSolo/McImage.git'
-group = "com.smallsoho.mobcase"
+def siteUrl = 'https://github.com/Arasthel/McImage'
+def gitUrl = 'https://github.com/Arasthel/McImage.git'
+group = "com.arasthel”
 version = "1.5.1"
 
 Properties properties = new Properties()
@@ -63,7 +63,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = "McImage"
+        name = “McImage”
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]

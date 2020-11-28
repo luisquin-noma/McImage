@@ -6,7 +6,7 @@ class CompressUtil {
 
     companion object {
         private const val TAG = "Compress"
-        fun compressImg(imgFile: File) {
+        fun compressImg(imgFile: File, outDir: File) {
             if (!ImageUtil.isImage(imgFile)) {
                 return
             }
@@ -20,11 +20,8 @@ class CompressUtil {
                 newSize = tempFile.length()
                 LogUtil.log("newSize = $newSize")
                 if (newSize < oldSize) {
-                    val imgFileName: String = imgFile.path
-                    if (imgFile.exists()) {
-                        imgFile.delete()
-                    }
-                    tempFile.renameTo(File(imgFileName))
+                    tempFile.copyTo(File(outDir, imgFile.name))
+                    tempFile.delete()
                 } else {
                     if (tempFile.exists()) {
                         tempFile.delete()
@@ -32,8 +29,9 @@ class CompressUtil {
                 }
 
             } else {
-                Tools.cmd("pngquant", "--skip-if-larger --speed 1 --nofs --strip --force --output ${imgFile.path} -- ${imgFile.path}")
-                newSize = File(imgFile.path).length()
+                val outFile = File(outDir, imgFile.name)
+                Tools.cmd("pngquant", "--skip-if-larger --speed 1 --nofs --strip --force --output ${outFile.path} -- ${imgFile.path}")
+                newSize = outFile.length()
             }
 
             LogUtil.log(TAG, imgFile.path, oldSize.toString(), newSize.toString())

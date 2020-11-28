@@ -1,6 +1,8 @@
 apply plugin: 'kotlin'
 apply from: 'publish.gradle'
 
+group = "com.nomasystems"
+
 buildscript {
     repositories {
         jcenter()
