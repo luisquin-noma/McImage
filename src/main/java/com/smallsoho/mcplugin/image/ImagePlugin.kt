@@ -45,13 +45,11 @@ class ImagePlugin : Plugin<Project> {
         project.gradle.taskGraph.whenReady {
             it.allTasks.forEach { task ->
                 val taskName = task.name
+                if (taskName.toLowerCase().endsWith("debug")) {
+                    isDebugTask = true
+                }
                 if (taskName.contains("assemble") || taskName.contains("resguard") || taskName.contains("bundle")) {
-                    if (taskName.toLowerCase().endsWith("debug") &&
-                            taskName.toLowerCase().contains("debug")) {
-                        isDebugTask = true
-                    }
                     isContainAssembleTask = true
-                    return@forEach
                 }
             }
         }
