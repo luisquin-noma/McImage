@@ -1,0 +1,90 @@
+{
+  "formatVersion": "1.1",
+  "component": {
+    "group": "com.arasthel",
+    "module": "McImage",
+    "version": "1.5.1.2",
+    "attributes": {
+      "org.gradle.status": "release"
+    }
+  },
+  "createdBy": {
+    "gradle": {
+      "version": "6.1.1",
+      "buildId": "wpibgel6fbcype7lqxqzglwaqu"
+    }
+  },
+  "variants": [
+    {
+      "name": "apiElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-api",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.5.20"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "McImage-1.5.1.2.jar",
+          "url": "McImage-1.5.1.2.jar",
+          "size": 37484,
+          "sha512": "e1ff512129318389512190bfbfef99122167c2a33d13a188155b5aa82f44de71fcf145096690a4ed1f5fb075f53e52b19666a20d75a81b10a0e118d197dcc607",
+          "sha256": "ae121d6b6f40086818985804f4970acacf8b5144ad226bd0a21debae0a14309e",
+          "sha1": "c6a6871e7a7e049aa77c59aed841ceac67e6f189",
+          "md5": "fb57b0933e132daf2ed3d20f8603322d"
+        }
+      ]
+    },
+    {
+      "name": "runtimeElements",
+      "attributes": {
+        "org.gradle.category": "library",
+        "org.gradle.dependency.bundling": "external",
+        "org.gradle.jvm.version": 8,
+        "org.gradle.libraryelements": "jar",
+        "org.gradle.usage": "java-runtime",
+        "org.jetbrains.kotlin.localToProject": "public",
+        "org.jetbrains.kotlin.platform.type": "jvm"
+      },
+      "dependencies": [
+        {
+          "group": "com.android.tools.build",
+          "module": "gradle",
+          "version": {
+            "requires": "3.5.0"
+          }
+        },
+        {
+          "group": "org.jetbrains.kotlin",
+          "module": "kotlin-stdlib-jdk8",
+          "version": {
+            "requires": "1.5.20"
+          }
+        }
+      ],
+      "files": [
+        {
+          "name": "McImage-1.5.1.2.jar",
+          "url": "McImage-1.5.1.2.jar",
+          "size": 37484,
+          "sha512": "e1ff512129318389512190bfbfef99122167c2a33d13a188155b5aa82f44de71fcf145096690a4ed1f5fb075f53e52b19666a20d75a81b10a0e118d197dcc607",
+          "sha256": "ae121d6b6f40086818985804f4970acacf8b5144ad226bd0a21debae0a14309e",
+          "sha1": "c6a6871e7a7e049aa77c59aed841ceac67e6f189",
+          "md5": "fb57b0933e132daf2ed3d20f8603322d"
+        }
+      ]
+    }
+  ]
+}
