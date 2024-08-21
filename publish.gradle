@@ -75,6 +75,7 @@ publishing {
 }
 
 signing {
+    useInMemoryPgpKeys(file("${System.getProperty('user.home')}/.gnupg/maven_private.key").text, findProperty('signing.password'))
     sign publishing.publications.mavenJava
 }
 

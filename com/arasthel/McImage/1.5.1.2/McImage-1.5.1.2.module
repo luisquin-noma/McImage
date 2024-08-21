@@ -1,7 +1,7 @@
 {
   "formatVersion": "1.1",
   "component": {
-    "group": "com.nomasystems",
+    "group": "com.arasthel",
     "module": "McImage",
     "version": "1.5.1.2",
     "attributes": {

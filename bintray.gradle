@@ -3,7 +3,7 @@ apply plugin: 'com.jfrog.bintray'
 
 def siteUrl = 'https://github.com/Arasthel/McImage'
 def gitUrl = 'https://github.com/Arasthel/McImage.git'
-group = "com.nomasystems"
+group = "com.arasthel"
 version = "1.5.1.2"
 
 Properties properties = new Properties()

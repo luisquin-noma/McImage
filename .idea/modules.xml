@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JM.iml" filepath="$PROJECT_DIR$/.idea/modules/JM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JM.main.iml" filepath="$PROJECT_DIR$/.idea/modules/JM.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/JM.test.iml" filepath="$PROJECT_DIR$/.idea/modules/JM.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/McImage.iml" filepath="$PROJECT_DIR$/McImage.iml" />
     </modules>
   </component>
